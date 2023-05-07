@@ -26,7 +26,7 @@ autenticarAcceso=()=>{
     .then(result => {
       if(result.message==null){
       let motoristaActual = result; 
-      
+  
       localStorage.setItem('IdMotoristaActual', motoristaActual._id);
       mostrarSeccion(2);}
       else{
@@ -89,6 +89,19 @@ const colorIconos=(num)=>{
   iconos[num].classList.add('color-verde');
 }
 
+obtenerOrdenes=()=>{
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch("localhost:8000/ordenes", requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      ordenes=result;
+      console.log(result)})
+    .catch(error => console.log('error', error));
+}
   var clientes=[
   {
     id:'1',
@@ -751,15 +764,15 @@ var clienteSeleccionado;
 
 renderizarEntregasDisponibles=()=>{
   document.getElementById('cuerpo-dashboard-disponibles').innerHTML="";
-  clientes.forEach(cliente=>{
-   if (cliente!=null){
+  ordenes.forEach(orden=>{
+   if (orden!=null){
     document.getElementById('cuerpo-dashboard-disponibles').innerHTML+=`
     <div id="elemento" class="tarjeta-elemento tarjeta-marco form-control" style="background-color:#CCCCCC">
     <div id=subcontenedor de tarjeta>
-    <div id="codigo" style="font-weight:bold">${cliente.id}</div>
-    <div id="nombre" style="font-weight:bold">${cliente.nombre}</div>
-    <div id="fecha" style="font-weight:bold">${cliente.fecha}</div>
-    <div id="tienda" style="font-weight:bold">${cliente.tienda}</div>
+    <div id="codigo" style="font-weight:bold">${orden.id}</div>
+    <div id="nombre" style="font-weight:bold">${orden.nombre}</div>
+    <div id="fecha" style="font-weight:bold">${orden.fecha}</div>
+    <div id="tienda" style="font-weight:bold">${orden.tienda}</div>
     </div>
     <div id="boton-orden" onclick="verDetalleEntregaDisponible(${indice})">
     <i class="fas fa-info-circle" style="font-size:40px; color:#17382B;"></i>
