@@ -41,15 +41,15 @@
             <h2 style="text-align:center" style="color:#17382B;">¡Manos a la obra!</h2>
             <form>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="hectorsauceda@gmail.com">
+                    <label for="email-inicio" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="email-inicio" aria-describedby="emailHelp" placeholder="hectorsauceda@gmail.com">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="* * * * * * * *">
+                    <label for="" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password-inicio" placeholder="* * * * * * * *">
                 </div>
                 <div class="contenedor">
-                <button type="button" class="btn-acceso" class="btn btn-primary" onclick="mostrarSeccion(2)">Ingresar</button>
+                <button type="button" class="btn-acceso" class="btn btn-primary" onclick="autenticarAcceso()">Ingresar</button>
                 <br>
                 <p style="margin: 0%">¿Quieres formar parte de nuestro equipo?</p>
                 <b onclick="mostrarSeccion(1)">Trabaja con nosotros</b>
@@ -67,11 +67,15 @@
             <h3>Ingrese sus datos para poder contactarle:</h3>
         </nav>
 
-        <form class="text-r form-acceso">
+        <form class="text-r form-acceso" id="formulario-registro">
             <h2>Registro de Motorista</h2>
             <div class="form-group">
-              <label for="nombre">Nombre completo:</label>
-              <input type="text" id="nombre" name="nombre" required>
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre-motorista" name="nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="nombre">Apellido:</label>
+              <input type="text" id="apellido-motorista" name="apellido" required>
             </div>
             <div class="form-group">
             <label for="dni">DNI:</label>
@@ -83,7 +87,15 @@
             </div>
             <div class="form-group">
               <label for="correo">Correo electrónico:</label>
-              <input type="email" id="correo" name="correo" required>
+              <input type="email" id="emailRegistro" name="correo" required>
+            </div>
+            <div class="form-group">
+              <label for="contraseña">Contraseña:</label>
+              <input type="password" id="password1" name="contraseña" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmacion">Confirmacion de contraseña:</label>
+              <input type="password" id="password2" name="confirmacion" required>
             </div>
             <div class="form-group">
               <label for="direccion">Dirección:</label>
@@ -111,7 +123,7 @@
               <option value="completa">Tiempo completo</option>
               <option value="parcial">Tiempo parcial</option>
             </select><br>
-            <button onclick="mostrarSeccion(2)" type="submit">Enviar registro</button>
+            <button id="btnCrearCuenta" onclick="registroCuenta()" type="button">Enviar registro</button>
           </form>
           </div>
 
@@ -496,7 +508,7 @@
           <div class="notification-input">
             <label for="method">Método de notificación:</label>
             <div class="notification-radio">
-              <input type="radio" id="email" name="method" value="email" checked>
+              <input type="radio" id="emailf" name="method" value="email" checked>
               <label for="email">Correo electrónico</label>
             </div>
             <div class="notification-radio">

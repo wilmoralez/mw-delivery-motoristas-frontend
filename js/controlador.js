@@ -1,7 +1,44 @@
 var id;
 var seccionSeleccionada=0;
+
+autenticarAcceso=()=>{
+  var localStorage = window.localStorage;
+  let txtemail = document.getElementById('email-inicio').value;
+  let txtpassword = document.getElementById('password-inicio').value;
+ 
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  
+  var raw = JSON.stringify({
+    "email": txtemail,
+    "password": txtpassword
+  });
+  
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  
+  fetch("http://localhost:8000/motoristas/autenticar", requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      if(result.message==null){
+      let motoristaActual = result; 
+      
+      localStorage.setItem('IdMotoristaActual', motoristaActual._id);
+      mostrarSeccion(2);}
+      else{
+        alert("Verifique su correo y contraseña, o llame a soporte tecnico");
+      }
+    })
+    .catch(error => console.log('error', error));
+
+}
+
 function mostrarSeccion(idSeccion) {
-    // Ocultar todas las secciones
+     // Ocultar todas las secciones
     seccionSeleccionada=idSeccion;
     if(idSeccion==0){
       document.getElementById('barra-navegacion').style.display='none';
@@ -72,7 +109,8 @@ const colorIconos=(num)=>{
 
 
       },
-            {
+           
+      {
         idProducto:'1989-ID ',
         cantidad:5,
         descripcion:'CAMISA-BLANCA-ESPECIAL-INVIERNO',
@@ -96,7 +134,8 @@ const colorIconos=(num)=>{
         precioTotal:'1070.55',
 
       },
-            {
+            
+      {
         idProducto:'1989-ID ',
         cantidad:5,
         descripcion:'CAMISA-BLANCA-ESPECIAL-INVIERNO',
@@ -705,6 +744,11 @@ var clientesPendientes=[
 
 var indice=0;
 var clienteSeleccionado;
+
+
+
+
+
 renderizarEntregasDisponibles=()=>{
   document.getElementById('cuerpo-dashboard-disponibles').innerHTML="";
   clientes.forEach(cliente=>{
@@ -819,6 +863,99 @@ tomarOrden=()=>{
  
 }
 
+
+
+//Funciones para validar correo y contraseña mediante expresiones regulares
+function validarEmail(email) {
+  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regexEmail.test(email);
+}
+
+function validarPassword(password) {
+  const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  return regexPassword.test(password);
+}
+
+//Validaciondes de registro de nuevos clientes
+ registroCuenta=()=> {
+  const formularioRegistro = document.getElementById('formulario-registro');
+  const email = document.getElementById('emailRegistro').value;
+  const password1 = document.getElementById('password1').value;
+  const password2 = document.getElementById('password2').value;
+  const nombreMotorista = document.getElementById('nombre-motorista').value;
+
+  const campos = formularioRegistro.querySelectorAll("input, select, textarea");
+  if (!validarEmail(email)) {
+    alert('El correo electrónico no es válido');
+    return;
+  }
+
+  if (!validarPassword(password1) || !validarPassword(password2) || password1!==password2) {
+    alert('Contraseña no válida. La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número');
+    return;
+  }
+
+  let formularioCompleto = true;
+
+
+  if (formularioCompleto) {
+    crearCuenta();
+    alert('¡Hola '+ nombreMotorista + ' tu solicitud ha sido recibida!, la revisaremos y te confirmaremos por correo ¡Gracias por aplicar!');
+   
+  } else {
+    alert("Por favor, completa todos los campos del formulario.");
+    return;
+  }
+
+  mostrarSeccion(2);
+};
+
+function crearCuenta(){
+  let txtcorreo = document.getElementById('emailRegistro').value;
+  let txtcontraseña = document.getElementById('password2').value; 
+  let txtnombre = document.getElementById('nombre-motorista').value; 
+  let txtapellido = document.getElementById('apellido-motorista').value; 
+  let txtdni=document.getElementById('dni').value;
+  let txttelefono=document.getElementById('telefono').value;
+  
+  let txtdireccion=document.getElementById('direccion').value;
+  let txtciudad=document.getElementById('ciudad').value;
+  let txtlicencia=document.getElementById('licencia').value;
+  let txtplaca=document.getElementById('placa').value;
+  let txtexperiencia=document.getElementById('experiencia').value;
+  let txtdisponibilidad=document.getElementById('disponibilidad').value;  
+
+
+
+  fetch('http://localhost:8000/motoristas/registrar', {
+    method: 'POST', 
+    headers: {
+      "Content-Type": "application/json", 
+    },
+    body: JSON.stringify({
+         email: txtcorreo,
+         password: txtcontraseña,
+         nombre: txtnombre,
+         apellido: txtapellido,
+         dni: txtdni,
+         telefono: txttelefono,
+        
+         direccion: txtdireccion,
+         ciudad: txtciudad,
+         licencia: txtlicencia,
+         placa: txtplaca,
+         experiencia: txtexperiencia,
+         disponibilidad: txtdisponibilidad,
+         aprobacion: false
+
+
+      })
+    })
+  .then(response => response.json())
+  .then(result => {
+    console.log(result);
+  }) 
+}
 
 
   
